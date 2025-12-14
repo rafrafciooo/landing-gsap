@@ -1,8 +1,14 @@
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/all";
 import { gsap } from "gsap";
+import { useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 
 const Hero = () => {
+	const videoRef = useRef();
+
+	const isMobile = useMediaQuery({ maxWidth: 767 });
+
 	useGSAP(() => {
 		const heroSplit = new SplitText(" .title", { type: "chars, words" });
 		const paragraphSplit = new SplitText(".subtitle", {
@@ -39,11 +45,29 @@ const Hero = () => {
 			})
 			.to(".right-leaf", { yPercent: 100 }, 0)
 			.to(".left-leaf", { yPercent: -100 }, 0);
+
+		const startValue = isMobile ? "top 50%" : "center 60%";
+		const endValue = isMobile ? "120% top" : "bottom top";
+
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: "video",
+				start: startValue,
+				end: endValue,
+				scrub: true,
+				pin: true,
+			},
+		});
+		videoRef.current.onloadedmetadata = () => {
+			tl.to(videoRef.current, {
+				currentTime: videoRef.current.duration,
+			});
+		};
 	}, []);
 	return (
 		<>
 			<section id='hero' className='noisy'>
-				<h1 className='title'>Mohito</h1>
+				<h1 className='title'>Żryj gruz</h1>
 				<img
 					src='/images/hero-left-leaf.png'
 					alt='leaf'
@@ -57,18 +81,25 @@ const Hero = () => {
 				<div className='body'>
 					<div className='content'>
 						<div className='space-y-5 hidden md:block'>
-							<p>A new way to enjoy cocktails</p>
-							<p className='subtitle'>Sip with us</p>
+							<p>Konopie, Koka</p>
+							<p className='subtitle'>Dupa Cyce Cocktails</p>
 						</div>
 						<div className='view-cocktails'>
-							<p className='subtitle'>
-								Every drink is unique, discover it, and sip with us.{" "}
-							</p>
-							<a href='#cocktails'>View Cocktails</a>
+							<p className='subtitle'>Sprawdź to gówno synu</p>
+							<a href='#cocktails'>Znajdz pigułke</a>
 						</div>
 					</div>
 				</div>
 			</section>
+			<div className='video absolute inset-0'>
+				<video
+					ref={videoRef}
+					src='/videos/output.mp4'
+					muted
+					playsInline
+					preload='auto'
+				/>
+			</div>
 		</>
 	);
 };

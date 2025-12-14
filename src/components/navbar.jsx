@@ -30,7 +30,7 @@ const Navbar = () => {
 						alt='logo'
 						className='w-10 h-10 object-contain'
 					/>
-					<p className='font-modern-negra text-3xl -mb-2'>Cool Cocktails</p>
+					<p className='font-modern-negra text-3xl -mb-2'>Cool Stuff</p>
 				</a>
 				<ul>
 					{navLinks.map(link => (
